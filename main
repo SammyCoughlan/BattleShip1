@@ -1,0 +1,88 @@
+#include <stdio.h>
+
+#define HIT 1
+#define NEAR 2
+#define MISS 0
+
+typedef struct {
+    int x;
+    int y;
+} Point;
+
+int Board[16][16];
+void MakeBoard(Point[10]);
+int CheckSpace(Point);
+int CheckNear(Point);
+void FindShip(int[16][16]);
+int MakeNear(Point);
+
+int main()
+{
+
+    int ShipCounter = 0;
+    int xCount = 0;
+    int yCount = 0;
+    Point ship[10] = { {.x = 2, .y = 1}, {.x = 11, .y = 1}, {.x = 14, .y = 3}, {.x = 9, .y = 4}, {.x = 3, .y = 5}, {.x = 5, .y = 7}, {.x = 11, .y = 9}, {.x = 3, .y = 11}, {.x = 7, .y = 12}, {.x = 9, .y = 14}};
+    MakeBoard(ship);
+    while (ShipCounter > 11)
+    {
+        Point toCheck = {.x = xCount, .y = yCount};
+        int result = CheckSpace(toCheck);
+        if(result == MISS || result == NEAR)
+        {
+            if(xCount == 15)
+            {
+                yCount++;
+            }else
+            {
+                xCount++;
+            }
+        }else if (result == HIT)
+        {
+            ShipCounter++;
+        }
+    }
+    
+}
+
+void MakeBoard(Point ships[])
+{
+    for (int x = 0; x <= 16; x++)
+    {
+        for (int y = 0; y <= 16; y++)
+        {
+            Board[x][y] = MISS;
+        }
+    }
+
+    for (int i = 0; i <= 10;i++)
+    {
+        Board[ships[i].x][ships[i].y] = HIT;
+        Board[ships[i].x+1][ships[i].y+1] = NEAR;
+        Board[ships[i].x-1][ships[i].y-1] = NEAR;
+        Board[ships[i].x-1][ships[i].y] = NEAR;
+        Board[ships[i].x+1][ships[i].y] = NEAR;
+        Board[ships[i].x][ships[i].y-1] = NEAR;
+        Board[ships[i].x][ships[i].y+1] = NEAR;
+        
+    }
+
+}
+
+int CheckSpace(Point pt)
+{
+    if(Board[pt.x][pt.y] == HIT)
+    {
+        return HIT;
+    }
+    else if (Board[pt.x][pt.y] == MISS)
+    {
+        return MISS;
+    }else if (Board[pt.x][pt.y] == NEAR)
+    {
+        return NEAR;
+    }else 
+    {
+        return MISS;
+    }
+}
